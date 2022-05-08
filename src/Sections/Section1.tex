@@ -1,6 +1,7 @@
 \section{The problem}
 
 \section{Project structure}
+You can find the source code \href{https://github.com/pinzauti/automated-reasoning}{here} and the source for the report \href{https://github.com/pinzauti/automated-reasoning-report}{here}
 
 \subsection{Stack used}
 
@@ -11,19 +12,28 @@ Everything was developed, tested and executed on a local machine\footnote{OEM: X
 The file structure of the project is the following:
 \dirtree{%
 .1 src.
-.2 asp.
-.3 data.
-.4 input.lp.
-.3 main.lp.
-.2 minizinc.
-.3 data.
-.4 input.mzn.
-.3 main.mzn.
+.2 asp\DTcomment{ASP part of the project.}.
+.3 data\DTcomment{Input data.}.
+.4 input.lp\DTcomment{User defined input for manual mode.}.
+.3 main.lp\DTcomment{ASP Model.}.
+.2 minizinc\DTcomment{MiniZinc part of the project.}.
+.3 data\DTcomment{Input data.}.
+.4 input.mzn\DTcomment{User defined input for manual mode.}.
+.3 main.mzn\DTcomment{MiniZinc Model.}.
 .2 main.py.
-.2 Makefile.
-.2 requirements.txt.
+.2 Makefile\DTcomment{Define commands to setup and execute the project.}.
+.2 requirements.txt\DTcomment{Required packages to run the project.}.
 }
 
+\begin{minted}{bash}
+    make setup
+\end{minted}
+
+If you want to know the commands available just type
+
+\begin{minted}{bash}
+    make help 
+\end{minted}
 \section{ASP}
 
 \section{Minizinc}
