@@ -1,0 +1,35 @@
+\section{Project structure}
+You can find the source code \href{https://github.com/pinzauti/automated-reasoning}{here} and the source for the report \href{https://github.com/pinzauti/automated-reasoning-report}{here}
+
+\subsection{Stack used}
+
+Everything was developed, tested and executed on a local machine\footnote{OEM: Xiaomi, OS: Windows 11 21H2, CPU: Intel Core i7-11370H, RAM: 16GB DDR4, GPU: NVIDIA GeForce MX450.}. As an entrypoint to both ASP and MiniZinc models, as well as instances initialization \href{https://www.python.org/downloads/release/python-3102/}{Python 3.10.2} was used.
+
+\href{https://github.com/potassco/clingo/releases/tag/v5.5.2}{Clingo 5.5.2} and a \href{https://marketplace.visualstudio.com/items?itemName=abelcour.asp-syntax-highlight}{Visual Studio Code extension} was used for ASP, while \href{https://github.com/MiniZinc/libminizinc/releases/tag/2.6.3}{MiniZinc 2.6.3} and \href{https://www.minizinc.org/ide/}{MiniZinc IDE} for MiniZinc. \href{https://copilot.github.com/}{Github Copilot} assisted all the development process.
+
+The file structure of the project is the following:
+\dirtree{%
+.1 src.
+.2 asp\DTcomment{ASP part of the project.}.
+.3 data\DTcomment{Input data.}.
+.4 input.lp\DTcomment{User defined input for manual mode.}.
+.3 main.lp\DTcomment{ASP Model.}.
+.2 minizinc\DTcomment{MiniZinc part of the project.}.
+.3 data\DTcomment{Input data.}.
+.4 input.mzn\DTcomment{User defined input for manual mode.}.
+.3 main.mzn\DTcomment{MiniZinc Model.}.
+.2 main.py.
+.2 Makefile\DTcomment{Define commands to setup and execute the project.}.
+.2 requirements.txt\DTcomment{Required packages to run the project.}.
+}
+
+\begin{minted}{bash}
+    make setup
+\end{minted}
+
+If you want to know the commands available just type
+
+\begin{minted}{bash}
+    make help 
+\end{minted}
+
