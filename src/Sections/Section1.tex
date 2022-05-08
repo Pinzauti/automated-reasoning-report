@@ -8,13 +8,20 @@ Everything was developed, tested and executed on a local machine\footnote{OEM: X
 
 \href{https://github.com/potassco/clingo/releases/tag/v5.5.2}{Clingo 5.5.2} and a \href{https://marketplace.visualstudio.com/items?itemName=abelcour.asp-syntax-highlight}{Visual Studio Code extension} was used for ASP, while \href{https://github.com/MiniZinc/libminizinc/releases/tag/2.6.3}{MiniZinc 2.6.3} and \href{https://www.minizinc.org/ide/}{MiniZinc IDE} for MiniZinc. \href{https://copilot.github.com/}{Github Copilot} was also used.
 
-
+The file structure of the project is the following:
 \dirtree{%
-.1 spam.
-.2 ham.
-.2 eggs.
-.3 more spam.
-.3 dead parrots.
+.1 src.
+.2 asp.
+.3 data.
+.4 input.lp.
+.3 main.lp.
+.2 minizinc.
+.3 data.
+.4 input.mzn.
+.3 main.mzn.
+.2 main.py.
+.2 Makefile.
+.2 requirements.txt.
 }
 
 \section{ASP}
