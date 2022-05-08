@@ -3,9 +3,14 @@ You can find the source code \href{https://github.com/pinzauti/automated-reasoni
 
 \subsection{Stack used}
 
-Everything was developed, tested and executed on a local machine\footnote{OEM: Xiaomi, OS: Windows 11 21H2, CPU: Intel Core i7-11370H, RAM: 16GB DDR4, GPU: NVIDIA GeForce MX450.}. As an entrypoint to both ASP and MiniZinc models, as well as instances initialization \href{https://www.python.org/downloads/release/python-3102/}{Python 3.10.2} was used.
+Everything was developed, tested and executed on a local machine\footnote{OEM: Xiaomi, OS: Windows 11 21H2, CPU: Intel Core i7-11370H, RAM: 16GB DDR4, GPU: NVIDIA GeForce MX450.}. The project is built using \href{https://www.python.org/downloads/release/python-3102/}{Python 3.10.2}, which allows to manage the ASP and MiniZinc models, the random instances and their solutions in only one command line interface.
 
-\href{https://github.com/potassco/clingo/releases/tag/v5.5.2}{Clingo 5.5.2} and a \href{https://marketplace.visualstudio.com/items?itemName=abelcour.asp-syntax-highlight}{Visual Studio Code extension} was used for ASP, while \href{https://github.com/MiniZinc/libminizinc/releases/tag/2.6.3}{MiniZinc 2.6.3} and \href{https://www.minizinc.org/ide/}{MiniZinc IDE} for MiniZinc. \href{https://copilot.github.com/}{Github Copilot} assisted all the development process.
+\href{https://github.com/potassco/clingo/releases/tag/v5.5.2}{Clingo 5.5.2} and a \href{https://marketplace.visualstudio.com/items?itemName=abelcour.asp-syntax-highlight}{Visual Studio Code extension} was used for ASP. All the project is built upon Clingo API~\cite{ClingoAPI}, which was necessary in order to generate and solve random instances and to format the output in an human readable way.
+
+As far as MiniZinc goes the model was developed using \href{https://github.com/MiniZinc/libminizinc/releases/tag/2.6.3}{MiniZinc 2.6.3} and \href{https://www.minizinc.org/ide/}{MiniZinc IDE}. Again, MiniZinc API~\cite{MiniZincPython} was heavily used in the main script.
+
+In both cases \href{https://copilot.github.com/}{Github Copilot} assisted the development process.
+Note that all the written code is documented.
 
 The file structure of the project is the following:
 \dirtree{%
@@ -23,13 +28,38 @@ The file structure of the project is the following:
 .2 requirements.txt\DTcomment{Required packages to run the project.}.
 }
 
+\subsection{How to run}
+First thing first you need to create a virtual environment and install the required packages\footnote{It will detect automatically if you are using Windows or Linux, no need to adjust anything.}. To do so just run the following commands:
 \begin{minted}{bash}
+    cd src/
     make setup
 \end{minted}
 
-If you want to know the commands available just type
+If you want to know what you can do just type:
 
 \begin{minted}{bash}
     make help 
 \end{minted}
 
+We will however explain everything here.
+
+\subsubsection{ASP}
+Two modes are available: a random mode and a manual mode. The random mode will generate a random instance and solve it. The manual mode will allow you to define your own instance and solve it.
+Let's go with order:
+
+If you want to use random mode you need to run the following command:
+\begin{minted}{bash}
+    make asp-random  [-d DIMENSION] [-n NUMBER] [-s SOLUTIONS]
+\end{minted}
+
+you can choose the dimension of the board and the number of initial points. However if you don't want to the program will generate them randomly for you and you can also decide to input only the dimension or only the number of starting points. Note that a upper bound was set on the dimension, both if you manually define it or if you don't. Going beyond that could lead to excessive execution time\footnote{Why did you not used the --time-limit option? \href{https://github.com/potassco/clingo/issues/151}{The API does not seem to support it}. However all the benchmarks in section~\ref{sec:benchmark} respect the 5 minutes time limit as required.}.
+
+By default all solutions will be displayed, if you want to display only a specific amount of solution pass it to the argument \mintinline{bash}{-a}. All of this is managed by the \mintinline{python}{asp_manual} function in the \file{main.py} file.
+
+If you want to use manual mode you need to run the following command:
+\begin{minted}{bash}
+    make asp-manual [-a SOLUTIONS]
+\end{minted}
+this will solve the model you defined in the file \file{input.lp} in the directory \file{src/asp/data}. The \mintinline{bash}{-a} argument is the same as explained above. All of this is managed by the \mintinline{python}{asp_manual} function in the \file{main.py} file.
+
+As anticipated the solutions will be printed in an human readable way thanks to the function \mintinline{python}{asp_prettier} located in the \file{main.py} file.
