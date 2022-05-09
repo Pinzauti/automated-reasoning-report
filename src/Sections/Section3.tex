@@ -50,7 +50,7 @@ In line 3 we impose that the goal point must be connected to a starting point.
     
     :- link(_, end(X,Y)), not link(start(X,Y), _), not goal(X, Y). 
 \end{minted}
-In line 1 we impose that no link can end in a starting point. In line 2 we impose that a link can start in a point only if in that point another link ends or if it is the starting point. In line 3 we impose that a link can end in a point only when in that point another link starts or if it is the goal.
+In line 1 we impose that no link can end in a starting point. In line 2 we impose that a link can start in a point only if in that point another link ends or if it is the starting point. In line 3 we impose that a link can end in a point only when in that point another link starts or if it is the goal.\graffito{Please note that some of the conditions here are partially redundant, however as stated in~\cite{ClingoGuide} and as verified experimentally often adding more denials, even if overlapping, results in a better performance.}
 
 
 \begin{minted}[breaklines, linenos]{text}
@@ -79,8 +79,6 @@ In line 1 we  impose that a link can not end when it starts. In line 2 we impose
 
 Finally on the last line we impose, using the \emph{aggregate} \mintinline{text}{#count}, that from each starting point to the goal the number of turns should be the one prescribed. We do that by checking a triple of consecutive links, if the difference between the x-axis and y-axis coordinates is 1 for both, then we have a turn.
  Note that we make use of \emph{pooling} in order to consider two cases. The first case is when the turn is made by a a triple of links which does not start from a starting point (but they must be obviously connected to it), the second case is when the turn is made by a triple directly starting from a starting point.
-
- Please note that some of the conditions here are partially redundant, however as stated in~\cite{ClingoGuide} and as verified experimentally often adding more denials, even if overlapping, resulted in a better performance.
 
 \subsection{Display}
 
