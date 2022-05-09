@@ -1,16 +1,5 @@
 \section{Project structure}
-You can find the source code \href{https://github.com/pinzauti/automated-reasoning}{here} and the source for the report \href{https://github.com/pinzauti/automated-reasoning-report}{here}
-
-\subsection{Stack used}
-
-Everything was developed, tested and executed on a local machine\footnote{OEM: Xiaomi, OS: Windows 11 21H2, CPU: Intel Core i7-11370H, RAM: 16GB DDR4, GPU: NVIDIA GeForce MX450.}. The project is built using \href{https://www.python.org/downloads/release/python-3102/}{Python 3.10.2}, which allows to manage the ASP and MiniZinc models, the random instances and their solutions in only one command line interface.
-
-\href{https://github.com/potassco/clingo/releases/tag/v5.5.2}{Clingo 5.5.2} and a \href{https://marketplace.visualstudio.com/items?itemName=abelcour.asp-syntax-highlight}{Visual Studio Code extension} was used for ASP. All the project is built upon Clingo API~\cite{ClingoAPI}, which was necessary in order to generate and solve random instances and to format the output in an human readable way.
-
-As far as MiniZinc goes the model was developed using \href{https://github.com/MiniZinc/libminizinc/releases/tag/2.6.3}{MiniZinc 2.6.3} and \href{https://www.minizinc.org/ide/}{MiniZinc IDE}. Again, MiniZinc API~\cite{MiniZincPython} was heavily used in the main script.
-
-In both cases \href{https://copilot.github.com/}{Github Copilot} assisted the development process.
-Note that all the written code is documented.
+You can find the source code \href{https://github.com/pinzauti/automated-reasoning}{here} and the source for the report \href{https://github.com/pinzauti/automated-reasoning-report}{here}.
 
 The file structure of the project is the following:
 \dirtree{%
@@ -21,12 +10,26 @@ The file structure of the project is the following:
 .3 main.lp\DTcomment{ASP Model.}.
 .2 minizinc\DTcomment{MiniZinc part of the project.}.
 .3 data\DTcomment{Input data.}.
-.4 input.mzn\DTcomment{User defined input for manual mode.}.
+.4 input.dzn\DTcomment{User defined input for manual mode.}.
 .3 main.mzn\DTcomment{MiniZinc Model.}.
 .2 main.py.
 .2 Makefile\DTcomment{Define commands to setup and execute the project.}.
 .2 requirements.txt\DTcomment{Required packages to run the project.}.
 }
+
+\subsection{Tech stack}
+
+Everything was developed, tested and executed on a local machine\footnote{OEM: Xiaomi, OS: Windows 11 21H2, CPU: Intel Core i7-11370H, RAM: 16GB DDR4, GPU: NVIDIA GeForce MX450.}. The project is built using \href{https://www.python.org/downloads/release/python-3102/}{Python 3.10.2}, which allows to manage the ASP and MiniZinc models, the random instances and their solutions in only one command line interface.
+
+\href{https://github.com/potassco/clingo/releases/tag/v5.5.2}{Clingo 5.5.2} and a \href{https://marketplace.visualstudio.com/items?itemName=abelcour.asp-syntax-highlight}{Visual Studio Code extension} was used for ASP. All the project is built upon Clingo API~\cite{ClingoAPI}, which was necessary in order to generate and solve random instances and to format the output in an human readable way.
+
+As far as MiniZinc goes the model was developed using \href{https://github.com/MiniZinc/libminizinc/releases/tag/2.6.3}{MiniZinc 2.6.3} and \href{https://www.minizinc.org/ide/}{MiniZinc IDE}. Again, MiniZinc API~\cite{MiniZincPython} was heavily used in the main script.
+
+In both cases \href{https://copilot.github.com/}{Github Copilot} assisted the development process.
+Note that all the written code is documented.
+
+This report is written using \href{https://www.latex-project.org/}{LaTeX} and the \href{https://ctan.org/pkg/minted?lang=en}{Minted package} for the source code.
+
 
 \subsection{How to run}
 First thing first you need to create a virtual environment and install the required packages\footnote{It will detect automatically if you are using Windows or Linux, no need to adjust anything.}. To do so just run the following commands:
@@ -45,21 +48,29 @@ We will however explain everything here.
 
 \subsubsection{ASP}
 Two modes are available: a random mode and a manual mode. The random mode will generate a random instance and solve it. The manual mode will allow you to define your own instance and solve it.
-Let's go with order:
+
+\paragraph{Random mode}
 
 If you want to use random mode you need to run the following command:
 \begin{minted}{bash}
-    make asp-random  [-d DIMENSION] [-n NUMBER] [-s SOLUTIONS]
+    make asp-random  [d DIMENSION] [n NUMBER] [s SOLUTIONS]
 \end{minted}
 
-you can choose the dimension of the board and the number of initial points. However if you don't want to the program will generate them randomly for you and you can also decide to input only the dimension or only the number of starting points. Note that a upper bound was set on the dimension, both if you manually define it or if you don't. Going beyond that could lead to excessive execution time\footnote{Why did you not used the --time-limit option? \href{https://github.com/potassco/clingo/issues/151}{The API does not seem to support it}. However all the benchmarks in section~\ref{sec:benchmark} respect the 5 minutes time limit as required.}.
+you can choose the dimension of the board and the number of initial points. However if you don't want to the program will generate them randomly for you; you can also decide to input only the dimension or only the number of starting points. Note that a upper bound was set on the dimension, both if you manually define it or if you don't. Going beyond that could lead to excessive execution time\footnote{Why did you not used the --time-limit option? \href{https://github.com/potassco/clingo/issues/151}{The API does not seem to support it}. However all the benchmarks in section~\ref{sec:benchmarks} respect the 5 minutes time limit as required.}.
+By default all solutions will be displayed, if you want to display only a specific amount of solution specify it to the argument \mintinline{bash}{s}. 
 
-By default all solutions will be displayed, if you want to display only a specific amount of solution pass it to the argument \mintinline{bash}{-a}. All of this is managed by the \mintinline{python}{asp_manual} function in the \file{main.py} file.
+All of this is managed by the \mintinline{python}{asp_random()} function in the \file{main.py} file. 
+It goes without saying that not all the randomly generated instances will be solvable, and the program will communicate when those are not.
+
+\paragraph{Manual mode}
 
 If you want to use manual mode you need to run the following command:
 \begin{minted}{bash}
-    make asp-manual [-a SOLUTIONS]
+    make asp-manual [a SOLUTIONS]
 \end{minted}
-this will solve the model you defined in the file \file{input.lp} in the directory \file{src/asp/data}. The \mintinline{bash}{-a} argument is the same as explained above. All of this is managed by the \mintinline{python}{asp_manual} function in the \file{main.py} file.
+this will solve the problem with the input data you should enter in the file \file{input.lp} located in the directory \file{src/asp/data}. The \mintinline{bash}{s} argument is the same as explained above. All of this is managed by the \mintinline{python}{asp_manual()} function in the \file{main.py} file.
+Some sanity checks on the user input are performed, but it should still be reasonable in order to produce something meaningful and in an acceptable time.
 
-As anticipated the solutions will be printed in an human readable way thanks to the function \mintinline{python}{asp_prettier} located in the \file{main.py} file.
+As anticipated the solutions will be printed in an human readable way thanks to the function \mintinline{python}{asp_prettier()} located in the \file{main.py} file.
+
+\subsubsection{MiniZinc}
