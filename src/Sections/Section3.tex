@@ -2,7 +2,7 @@
 As explained in~\cite{ClingoGuide} an ASP model is divided in four part: generate, define, test and display.
 As for the generate part our Python program handles both the generation of the random instances in random mode and the inclusion of the user defined input in manual mode.
 \subsection{Generate}
-The input is composed by \mintinline{text}{n} + 1 ground terms, with \mintinline{text}{n} the number of starting points.
+The input is composed by \mintinline{text}{n} + 1 \emph{ground terms}, with \mintinline{text}{n} the number of starting points.
 \begin{minted}[breaklines, linenos]{text}
     boardl(D).
     number(X_1, Y_1, T_1).
@@ -25,11 +25,11 @@ The define part is displayed below
     connected(start(X1,Y1), end(X2,Y2)) :- connected(start(X1,Y1), end(Z1,Z2)), link(start(Z1,Z2),end(X2,Y2)). 
 \end{minted}
 
-In line 1 we have a rule for defining the predicate grid, i.e. a matrix of dimension $DxD$. The goal point, i.e. the intersection point of our links is defined in line 3: this has to be one and has of course to be part of the grid.
+In line 1 we have a rule for defining the \emph{predicate} grid, i.e. a matrix of dimension $DxD$. The goal point, i.e. the intersection point of our links is defined in line 3: this has to be one and has of course to be part of the grid.
 On line 4 we have a rule for defining the predicate link, which is the connection between two points of the grid, this connection can take place or not and can't be diagonal but only horizontal and vertical. Note the use of the predicates \mintinline{text}{start} and \mintinline{text}{end} which serves the scope to give directionality to the links.
 On line 5 we have the connected predicate, defined recursively on the link definition, which is the predicate that checks if two points are connected.
 \subsection{Test}
-Let us start describing the first denials:
+Let us start describing the first \emph{denials}:
 
 \begin{minted}[breaklines, linenos]{text}
     :- #count{grid(X,Y): number(X,Y, _)} < 2. 
@@ -44,7 +44,7 @@ In line 3 we impose that the goal point must be connected to a starting point.
 
 
 \begin{minted}[breaklines, linenos]{text}
-    :- link(start(X1, Y1), end(X0, Y0)), number(X0, Y0, _). 
+    :- link(_, end(X0, Y0)), number(X0, Y0, _).
 
     :- link(start(X,Y), _), not link(_, end(X,Y)), not number(X,Y, _).
     
@@ -77,8 +77,10 @@ In line 1 we  impose that a link can not end when it starts. In line 2 we impose
     grid(X1,Y1), grid(X2, Y2): link(start(X0, Y0), end(X1, Y1)), link(start(X1, Y1), end(X2, Y2)), |X0-X2| = 1, |Y0-Y2| = 1} != T, number(X0, Y0, T).
 \end{minted}
 
-Finally on the last line we impose that from each starting point to the goal the number of turns should be the one prescribed. We do that by checking a triple of consecutive links, if the difference between the x-axis and y-axis coordinates is 1 for both, then we have a turn.
+Finally on the last line we impose, using the \emph{aggregate} \mintinline{text}{#count}, that from each starting point to the goal the number of turns should be the one prescribed. We do that by checking a triple of consecutive links, if the difference between the x-axis and y-axis coordinates is 1 for both, then we have a turn.
  Note that we make use of \emph{pooling} in order to consider two cases. The first case is when the turn is made by a a triple of links which does not start from a starting point (but they must be obviously connected to it), the second case is when the turn is made by a triple directly starting from a starting point.
+
+ Please note that some of the conditions here are partially redundant, however as stated in~\cite{ClingoGuide} and as verified experimentally often adding more denials, even if overlapping, resulted in a better performance.
 
 \subsection{Display}
 
