@@ -14,7 +14,7 @@ The input is composed by \mintinline{text}{n} + 1 \emph{ground terms}, with \min
 \mintinline{text}{D} is the dimension of the board and \mintinline{text}{X_i, Y_i} the coordinates of the starting points. \mintinline{text}{T} is the number of turns each starting point has to make to arrive to the intersection point.
 
 \subsection{Define}
-The define part is displayed below
+The define part is displayed below\graffito{There can be only one intersection point (i.e. the goal) and every two point in the grid there can or can't be a link between them. We will define with denials when those links can exist.}
 \begin{minted}[breaklines, linenos]{text}
     grid(1..D, 1..D) :-boardl(D).
     1 {goal(X,Y): grid(X,Y)} 1.

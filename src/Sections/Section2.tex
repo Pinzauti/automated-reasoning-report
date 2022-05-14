@@ -7,11 +7,11 @@ The file structure of the project is the following\graffito{In this section we t
 .2 asp\DTcomment{ASP part of the project.}.
 .3 data\DTcomment{Input data.}.
 .4 input.lp\DTcomment{User defined input for manual mode.}.
-.3 main.lp\DTcomment{ASP Model.}.
+.3 model.lp\DTcomment{ASP Model.}.
 .2 minizinc\DTcomment{MiniZinc part of the project.}.
 .3 data\DTcomment{Input data.}.
 .4 input.dzn\DTcomment{User defined input for manual mode.}.
-.3 main.mzn\DTcomment{MiniZinc Model.}.
+.3 model.mzn\DTcomment{MiniZinc Model.}.
 .2 main.py.
 .2 Makefile\DTcomment{Define commands to setup and execute the project.}.
 .2 requirements.txt\DTcomment{Required packages to run the project.}.
@@ -31,7 +31,7 @@ This report is written using \href{https://www.latex-project.org/}{LaTeX} and th
 
 
 \subsection{How to run}
-First thing first you need to create a virtual environment and install the required packages\footnote{It will detect automatically if you are using Windows or Linux, no need to adjust anything.}. To do so just run the following commands\graffito{The packages installed are, unsuprisingly, clingo and minizinc.}:
+First thing first you need to create a virtual environment and install the required packages\footnote{It will detect automatically if you are using Windows or Linux, no need to adjust anything.}. To do so just run the following commands\graffito{The packages installed are, unsuprisingly, clingo and minizinc[dzn].}:
 \begin{minted}{bash}
     cd src/
     make setup
