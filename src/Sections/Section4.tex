@@ -20,8 +20,9 @@ On line 3 we define the input format of the starting points which will be of the
                        |X@$_n$@, Y@$_n$@, T@$_n$@|];
 \end{minted}
 with  \mintinline{minizinc}{n} the number of starting points and each line representing, in order, the X, Y coordinates of a starting point and the number of turns it has to make in order to arrive to the goal.
+
 Finally, on line 3, we define the multidimensional array of variables \mintinline{minizinc}{Board}. Board is of size $D$x$D$ and has two dimensions: the first one will store the elements of the board from the one represented in~\ref{figm:board}:
-\begin{figure}[ht]
+\begin{figure}[h]
     \centering
     \def\svgwidth{\columnwidth}
     \import{./Images/}{minizinc.pdf_tex}

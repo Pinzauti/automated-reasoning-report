@@ -62,29 +62,5 @@
     \put(0,0){\includegraphics[width=\unitlength,page=4]{minizinc.pdf}}%
     \put(0.00312961,0.22099837){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Starting cell\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=5]{minizinc.pdf}}%
-    \put(0.15797467,0.94420536){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}1\end{tabular}}}}%
-    \put(0,0){\includegraphics[width=\unitlength,page=6]{minizinc.pdf}}%
-    \put(0.36393745,0.94403898){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}2\end{tabular}}}}%
-    \put(0,0){\includegraphics[width=\unitlength,page=7]{minizinc.pdf}}%
-    \put(0.56981019,0.94418558){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}3\end{tabular}}}}%
-    \put(0,0){\includegraphics[width=\unitlength,page=8]{minizinc.pdf}}%
-    \put(0.77578162,0.94415845){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}4\end{tabular}}}}%
-    \put(0,0){\includegraphics[width=\unitlength,page=9]{minizinc.pdf}}%
-    \put(0.15834999,0.63260488){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}5\end{tabular}}}}%
-    \put(0,0){\includegraphics[width=\unitlength,page=10]{minizinc.pdf}}%
-    \put(0.36423471,0.63253033){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}6\end{tabular}}}}%
-    \put(0,0){\includegraphics[width=\unitlength,page=11]{minizinc.pdf}}%
-    \put(0.1584692,0.32128615){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}7\end{tabular}}}}%
-    \put(0,0){\includegraphics[width=\unitlength,page=12]{minizinc.pdf}}%
-    \put(0.36438105,0.32129611){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}8\end{tabular}}}}%
-    \put(0,0){\includegraphics[width=\unitlength,page=13]{minizinc.pdf}}%
-    \put(0.57027487,0.32134628){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}9\end{tabular}}}}%
-    \put(0,0){\includegraphics[width=\unitlength,page=14]{minizinc.pdf}}%
-    \put(0.77172112,0.32132493){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}10\end{tabular}}}}%
-    \put(0,0){\includegraphics[width=\unitlength,page=15]{minizinc.pdf}}%
-    \put(0.97781283,0.32130483){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}11\end{tabular}}}}%
-    \put(0,0){\includegraphics[width=\unitlength,page=16]{minizinc.pdf}}%
-    \put(0.15447626,0.00958168){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}12\end{tabular}}}}%
-    \put(0,0){\includegraphics[width=\unitlength,page=17]{minizinc.pdf}}%
   \end{picture}%
 \endgroup%
