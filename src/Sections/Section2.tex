@@ -12,7 +12,9 @@ The file structure of the project is the following\graffito{In this section we t
 .3 data\DTcomment{Input data.}.
 .4 input.dzn\DTcomment{User defined input for manual mode.}.
 .3 model.mzn\DTcomment{MiniZinc Model.}.
-.2 main.py.
+.2 main.py.\DTcomment{Program entrypoint.}.
+.2 asp.py.\DTcomment{Handles everything related to ASP.}.
+.2 mz.py.\DTcomment{Handles everything related to MiniZinc.}.
 .2 Makefile\DTcomment{Define commands to setup and execute the project.}.
 .2 requirements.txt\DTcomment{Required packages to run the project.}.
 }
@@ -31,7 +33,7 @@ This report is written using \href{https://www.latex-project.org/}{LaTeX} and th
 
 
 \subsection{How to run}
-First thing first you need to create a virtual environment and install the required packages\footnote{It will detect automatically if you are using Windows or Linux, no need to adjust anything.}. To do so just run the following commands\graffito{The packages installed are, unsuprisingly, clingo and minizinc[dzn].}:
+First thing first you need to create a virtual environment and install the required packages\footnote{It will detect automatically if you are using Windows or Linux, no need to adjust anything.}. To do so just run the following commands\graffito{The packages installed are, peraphs unsuprisingly, clingo and minizinc[dzn].}:
 \begin{minted}{bash}
     cd src/
     make setup
@@ -65,11 +67,35 @@ It goes without saying that not all the randomly generated instances will be sol
 
 If you want to use manual mode you need to run the following command:
 \begin{minted}{bash}
-    make asp-manual [a SOLUTIONS]
+    make asp-manual [s SOLUTIONS]
 \end{minted}
-this will solve the problem with the input data you should enter in the file \file{input.lp} located in the directory \file{src/asp/data}. The \mintinline{bash}{s} argument is the same as explained above. All of this is managed by the \mintinline{python}{asp_manual()} function in the \file{main.py} file.
+this will solve the problem with the input data you should enter in the file \file{input.lp} located in the directory \file{src\\asp\\data}. The \mintinline{bash}{s} argument is the same as explained above. All of this is managed by the \mintinline{python}{asp_manual()} function in the \file{main.py} file.
 Some sanity checks on the user input are performed, but it should still be reasonable in order to produce something meaningful and in an acceptable time.
 
 As anticipated the solutions will be printed in an human readable way thanks to the function \mintinline{python}{asp_prettier()} located in the \file{main.py} file.
 
 \subsubsection{MiniZinc}
+Again, two modes are available: a random mode and a manual mode. The parameters and the functioning are the same, however we briefly present them\graffito{If the program returns you some kind of generic error it is most likely that you should add MiniZinc installation location to your PATH. More on that \href{https://github.com/MiniZinc/minizinc-python/issues/60}{here}.}.
+
+\paragraph{Random mode}
+
+If you want to use random mode you need to run the following command:
+\begin{minted}{bash}
+    make minzinc-random  [d DIMENSION] [n NUMBER] [s SOLUTIONS]
+\end{minted}
+where \mintinline{bash}{d} is the dimension of the board, \mintinline{bash}{n} is the number of starting points and \mintinline{bash}{s} is the number of solutions to be displayed. All the parameters are optional, if not inserted  \mintinline{bash}{d} and  \mintinline{bash}{n} will be randomly chosen by the program, and all solution will be displayed.
+
+\paragraph{Manual mode}
+
+If you want to use manual mode you should insert the input data in the file \file{input.dzn} located in the directory \file{src\\minizinc\\data} and run the following command:
+\begin{minted}{bash}
+    make minizinc-manual [s SOLUTIONS]
+\end{minted}
+where \mintinline{bash}{s} is the number of solutions to be displayed.
+
+\subsubsection{Both}
+You can also solve both the ASP and the MiniZinc problems at the same time, inserting the input data in the file \file{input.lp} located in the directory \file{src\\asp\\data} and \file{input.dzn} located in the directory \file{src\\minizinc\\data}. The command is
+\begin{minted}{bash}
+    make both [s SOLUTIONS]
+\end{minted}
+where \mintinline{bash}{s} as always is the number of solutions to be displayed.
