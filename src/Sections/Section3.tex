@@ -2,18 +2,18 @@
 As explained in~\cite{ClingoGuide} an ASP model is divided in four part: generate, define, test and display.
 As for the generate part our Python program handles both the generation of the random instances in random mode and the inclusion of the user defined input in manual mode.
 \subsection{Generate}
-The input is composed by \mintinline{text}{n} + 1 \emph{ground terms}, with \mintinline{text}{n} the number of starting points.
-\begin{minted}[breaklines, linenos]{text}
+The input is composed by \mintinline{text}{n} + 1 \emph{ground terms}, with \mintinline{text}{n} the number of starting points:
+\begin{minted}[breaklines, linenos, escapeinside=@@]{text}
     boardl(D).
-    number(X_1, Y_1, T_1).
+    number(X@$_1$@, Y@$_1$@, T@$_1$@).
     .
     .
     .
-    number(X_n, Y_n, T_n).
+    number(X@$_n$@, Y@$_n$@, T@$_n$@).
 \end{minted}
-\mintinline{text}{D} is the dimension of the board and \mintinline{text}{X_i, Y_i} the coordinates of the starting points. \mintinline{text}{T} is the number of turns each starting point has to make to arrive to the intersection point.
+where \mintinline{text}{D} is the dimension of the board and \mintinline{text}{X_i, Y_i} are the coordinates of the starting points. \mintinline{text}{T} is the number of turns each starting point has to make in order to arrive to the intersection point.
 
-\subsection{Define}
+\subsection{Define}\label{sec:asp-define}
 The define part is displayed below\graffito{There can be only one intersection point (i.e. the goal) and every two point in the grid there can or can't be a link between them. We will define with denials when those links can exist.}
 \begin{minted}[breaklines, linenos]{text}
     grid(1..D, 1..D) :-boardl(D).
@@ -82,4 +82,14 @@ Finally on the last line we impose, using the \emph{aggregate} \mintinline{text}
 
 \subsection{Display}
 
-Finally with the last two lines we display our solution, hiding everything except the goal and the link towards it.
+Finally with the last two lines we display our solution, hiding everything except the goal and the link towards it. The output format is:
+
+\begin{minted}[breaklines, linenos, escapeinside=@@]{text}
+    link(X@$_1$@, Y@$_1$@, X@$_2$@, X@$_2$@).
+    .
+    .
+    .
+    link(X@$_{n-1}$@, Y@$_{n-1}$@, X@$_n$@, Y@$_n$@).
+\end{minted}
+
+where link is the predicate defined in~\ref{sec:asp-define} which describes the link between points. All the links together describe the path from the starting points to the intersection point.
