@@ -69,7 +69,7 @@ If you want to use manual mode you need to run the following command:
 \begin{minted}{bash}
     make asp-manual [s SOLUTIONS]
 \end{minted}
-this will solve the problem with the input data you should enter in the file \file{input.lp} located in the directory \file{src\\asp\\data}. The \mintinline{bash}{s} argument is the same as explained above. All of this is managed by the \mintinline{python}{asp_manual()} function in the \file{main.py} file.
+this will solve the problem with the input data that you should enter in the file \path{src\asp\data\input.lp}. The \mintinline{bash}{s} argument is the same as explained above. All of this is managed by the \mintinline{python}{asp_manual()} function in the \file{main.py} file.
 Some sanity checks on the user input are performed, but it should still be reasonable in order to produce something meaningful and in an acceptable time.
 
 As anticipated the solutions will be printed in an human readable way thanks to the function \mintinline{python}{asp_prettier()} located in the \file{main.py} file.
@@ -87,14 +87,14 @@ where \mintinline{bash}{d} is the dimension of the board, \mintinline{bash}{n} i
 
 \paragraph{Manual mode}
 
-If you want to use manual mode you should insert the input data in the file \file{input.dzn} located in the directory \file{src\\minizinc\\data} and run the following command:
+If you want to use manual mode you should insert the input data in the file \path{src\minizinc\data\input.dzn} and run the following command:
 \begin{minted}{bash}
     make minizinc-manual [s SOLUTIONS]
 \end{minted}
 where \mintinline{bash}{s} is the number of solutions to be displayed.
 
 \subsubsection{Both}
-You can also solve both the ASP and the MiniZinc problems at the same time, inserting the input data in the file \file{input.lp} located in the directory \file{src\\asp\\data} and \file{input.dzn} located in the directory \file{src\\minizinc\\data}. The command is
+You can also solve both the ASP and the MiniZinc problems at the same time, inserting the input data in the file \path{src\asp\data\input.lp} and \path{src\minizinc\data\input.dzn}. The command is
 \begin{minted}{bash}
     make both [s SOLUTIONS]
 \end{minted}
