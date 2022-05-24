@@ -135,7 +135,16 @@ The following global constraints were used:
     \item[among] \mintinline[breaklines]{minizinc}{among(var int: n, array [$X] of var int: x, set of int: v)} Requires exactly \mintinline{minizinc}{n} variables in \mintinline{minizinc}{x} to take one of the values in \mintinline{minizinc}{v}.
     \item[count\_eq]  \mintinline[breaklines]{minizinc}{predicate count_eq(array [$X] of var int: x, var int: y, var int: c)} Constrains \mintinline{minizinc}{c} to be the number of occurrences of \mintinline{minizinc}{y} in \mintinline{minizinc}{x}.
 \end{description}
+The use of let expression was also require, we report the syntax below:
 
+\begin{minted}[breaklines]{minizinc}
+<let-expr> ::= "let" "{" <let-item> ";" ... "}" "in" <expr>
+
+<let-item> ::= <var-decl-item>
+             | <constraint-item>
+\end{minted}
+
+Let us explain how global expressions were used starting with:
 
 \begin{minted}[breaklines, linenos]{minizinc}
 let {array[D,D] of var 0..12: MoveBoard; constraint forall(i,j in D) (MoveBoard[i,j] = Board[i,j, 1]);} in
@@ -146,11 +155,13 @@ among(1, MoveBoard, 7..10)
 elseif number = 4 then
 count_eq(MoveBoard, 11, 1)
 else
-false % There can't be more than 4 points!
+false 
 endif
 \end{minted}
+Here we require that, depending on the number of starting points, there are a certain type of intersection cells, e.g. if we have four points we need a single interception cell, the number 11.
+And so on for the other cases.
 
-
+We proceed now with three brief constraints:
 \begin{minted}[breaklines, linenos]{minizinc}
 constraint(
 forall (n in N)(
@@ -168,3 +179,5 @@ let {array[D,D] of var 0..12: MoveBoard; constraint forall(i,j in D) (MoveBoard[
 count_eq(MoveBoard, 12, number)
 );
     \end{minted}
+
+In the first one we require each path to do the prescribed number of turns, in the second one we impose that the number of intersection point (i.e. point labelled as \mintinline[breaklines]{minizinc}{number + 1}) is exactly one. Then with the last one we impose the number of starting cells (i.e. labelled with 12 in the first dimension of the board) to be exactly the same as the number of starting points, this constraint could seem redundant, but for how the predicates in section~\ref{subsec:predicates} were defined it turned to be necessary.
