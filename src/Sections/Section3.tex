@@ -4,25 +4,25 @@ As for the generate part our Python program handles both the generation of the r
 \subsection{Generate}
 The input is composed by \mintinline{text}{n} + 1 \emph{ground terms}, with \mintinline{text}{n} the number of starting points\footnote{From now one we represent column position with $X$ and row position with $Y$. Even in the Python script, when a point is labelled as ($X$, $Y$) we are referring to columns and row. This is rather unusual, but necessary in order to be consistent with the notation of the problem assigned.}:
 \begin{minted}[breaklines, linenos, escapeinside=@@]{text}
-    boardl(D).
-    number(X@$_1$@, Y@$_1$@, T@$_1$@).
-    .
-    .
-    .
-    number(X@$_n$@, Y@$_n$@, T@$_n$@).
+boardl(D).
+number(X@$_1$@, Y@$_1$@, T@$_1$@).
+.
+.
+.
+number(X@$_n$@, Y@$_n$@, T@$_n$@).
 \end{minted}
 where \mintinline{text}{D} is the dimension of the board and \mintinline{text}{X_i, Y_i} are the coordinates of the starting points. \mintinline{text}{T} is the number of turns each starting point has to make in order to arrive to the intersection point.
 
 \subsection{Define}\label{sec:asp-define}
 The define part is displayed below\graffito{There can be only one intersection point (i.e. the goal) and every two point in the grid there can or can't be a link between them. We will define with denials when those links can exist.}
 \begin{minted}[breaklines, linenos]{text}
-    grid(1..D, 1..D) :-boardl(D).
-    1 {goal(X,Y): grid(X,Y)} 1.
-    
-    {link(start(X1, Y1), end(X2, Y2)) :  grid(X1,Y1), grid(X2,Y2), |X1 - X2| + |Y1 - Y2| = 1}. 
-    
-    connected(start(X1,Y1) ,end(X2,Y2)) :- link(start(X1,Y1), end(X2,Y2)).
-    connected(start(X1,Y1), end(X2,Y2)) :- connected(start(X1,Y1), end(Z1,Z2)), link(start(Z1,Z2),end(X2,Y2)). 
+grid(1..D, 1..D) :-boardl(D).
+1 {goal(X,Y): grid(X,Y)} 1.
+
+{link(start(X1, Y1), end(X2, Y2)) :  grid(X1,Y1), grid(X2,Y2), |X1 - X2| + |Y1 - Y2| = 1}. 
+
+connected(start(X1,Y1) ,end(X2,Y2)) :- link(start(X1,Y1), end(X2,Y2)).
+connected(start(X1,Y1), end(X2,Y2)) :- connected(start(X1,Y1), end(Z1,Z2)), link(start(Z1,Z2),end(X2,Y2)). 
 \end{minted}
 
 In line 1 we have a rule for defining the \emph{predicate} grid, i.e. a matrix of dimension $DxD$. The goal point, i.e. the intersection point of our links is defined in line 3: this has to be one and has of course to be part of the grid.
@@ -32,11 +32,11 @@ On line 5 we have the connected predicate, defined recursively on the link defin
 Let us start describing the first \emph{denials}:
 
 \begin{minted}[breaklines, linenos]{text}
-    :- #count{grid(X,Y): number(X,Y, _)} < 2. 
+:- #count{grid(X,Y): number(X,Y, _)} < 2. 
 
-    :- goal(X, Y), number(X, Y, _). 
-    
-    :- goal(X, Y), not connected(start(X0, Y0), end(X,Y)), number(X0,Y0, _). 
+:- goal(X, Y), number(X, Y, _). 
+
+:- goal(X, Y), not connected(start(X0, Y0), end(X,Y)), number(X0,Y0, _). 
 \end{minted}
 
 In line 1 we impose the number of starting point to be at least 2. In line 2 we impose that the goal point must not be a starting point.
@@ -44,37 +44,37 @@ In line 3 we impose that the goal point must be connected to a starting point.
 
 
 \begin{minted}[breaklines, linenos]{text}
-    :- link(_, end(X0, Y0)), number(X0, Y0, _).
+:- link(_, end(X0, Y0)), number(X0, Y0, _).
 
-    :- link(start(X,Y), _), not link(_, end(X,Y)), not number(X,Y, _).
-    
-    :- link(_, end(X,Y)), not link(start(X,Y), _), not goal(X, Y). 
+:- link(start(X,Y), _), not link(_, end(X,Y)), not number(X,Y, _).
+
+:- link(_, end(X,Y)), not link(start(X,Y), _), not goal(X, Y). 
 \end{minted}
 In line 1 we impose that no link can end in a starting point. In line 2 we impose that a link can start in a point only if in that point another link ends or if it is the starting point. In line 3 we impose that a link can end in a point only when in that point another link starts or if it is the goal.\graffito{Please note that some of the conditions here are partially redundant, however as stated in~\cite{ClingoGuide} and as verified experimentally often adding more denials, even if overlapping, results in a better performance.}
 
 
 \begin{minted}[breaklines, linenos]{text}
-    :- link(start(X, Y),end(X1, Y1)), link(start(X, Y), end(X2, Y2)), X1 != X2. 
+:- link(start(X, Y),end(X1, Y1)), link(start(X, Y), end(X2, Y2)), X1 != X2. 
 
-    :- link(start(X, Y),end(X1, Y1)), link(start(X, Y), end(X2, Y2)), Y1 != Y2. 
-    
-    :- link(start(X1, Y1),end(X, Y)), link(start(X2, Y2), end(X, Y)), X1 != X2, not goal(X,Y). 
-    
-    :- link(start(X1, Y1),end(X, Y)), link(start(X2, Y2), end(X, Y)), Y1 != Y2, not goal(X,Y). 
+:- link(start(X, Y),end(X1, Y1)), link(start(X, Y), end(X2, Y2)), Y1 != Y2. 
+
+:- link(start(X1, Y1),end(X, Y)), link(start(X2, Y2), end(X, Y)), X1 != X2, not goal(X,Y). 
+
+:- link(start(X1, Y1),end(X, Y)), link(start(X2, Y2), end(X, Y)), Y1 != Y2, not goal(X,Y). 
 \end{minted}
 
 In line 1 and 2 we impose that there can not be two links from one starting point. In line 3 and 4 we impose that two links can't end in the same point (i.e. there can not be intersections).
 \begin{minted}[breaklines, linenos]{text}
-    :- link(start(X1, Y1), end(X2, Y2)), link(start(X2,Y2), end(X1, Y1)).
+:- link(start(X1, Y1), end(X2, Y2)), link(start(X2,Y2), end(X1, Y1)).
 
-    :- link(_, end(X1,Y1)), not connected(start(X1,Y1), end(X, Y)), goal(X, Y), not goal(X1,Y1). 
+:- link(_, end(X1,Y1)), not connected(start(X1,Y1), end(X, Y)), goal(X, Y), not goal(X1,Y1). 
 \end{minted}
 
 In line 1 we  impose that a link can not end when it starts. In line 2 we impose that a link have to be connected to the goal. All together, we are avoiding loops.
 
 \begin{minted}[breaklines, linenos]{text}
-    :- #count{grid(X2,Y2), grid(X3, Y3): link(start(X1, Y1), end(X2, Y2)), link(start(X2, Y2), end(X3, Y3)), |X1-X3| = 1, |Y1-Y3| = 1, connected(start(X0, Y0), end(X1, Y1));
-    grid(X1,Y1), grid(X2, Y2): link(start(X0, Y0), end(X1, Y1)), link(start(X1, Y1), end(X2, Y2)), |X0-X2| = 1, |Y0-Y2| = 1} != T, number(X0, Y0, T).
+:- #count{grid(X2,Y2), grid(X3, Y3): link(start(X1, Y1), end(X2, Y2)), link(start(X2, Y2), end(X3, Y3)), |X1-X3| = 1, |Y1-Y3| = 1, connected(start(X0, Y0), end(X1, Y1));
+grid(X1,Y1), grid(X2, Y2): link(start(X0, Y0), end(X1, Y1)), link(start(X1, Y1), end(X2, Y2)), |X0-X2| = 1, |Y0-Y2| = 1} != T, number(X0, Y0, T).
 \end{minted}
 
 Finally on the last line we impose, using the \emph{aggregate} \mintinline{text}{#count}, that from each starting point to the goal the number of turns should be the one prescribed. We do that by checking a triple of consecutive links, if the difference between the x-axis and y-axis coordinates is 1 for both, then we have a turn.
@@ -85,11 +85,11 @@ Finally on the last line we impose, using the \emph{aggregate} \mintinline{text}
 Finally with the last two lines we display our solution, hiding everything except the goal and the link towards it. The output format is:
 
 \begin{minted}[breaklines, linenos, escapeinside=@@]{text}
-    link(X@$_1$@, Y@$_1$@, X@$_2$@, Y@$_2$@).
-    .
-    .
-    .
-    link(X@$_{n-1}$@, Y@$_{n-1}$@, X@$_n$@, Y@$_n$@).
+link(X@$_1$@, Y@$_1$@, X@$_2$@, Y@$_2$@).
+.
+.
+.
+link(X@$_{n-1}$@, Y@$_{n-1}$@, X@$_n$@, Y@$_n$@).
 \end{minted}
 
 where link is the predicate defined in~\ref{sec:asp-define} which describes the link between points. All the links together describe the path from the starting points to the intersection point.
