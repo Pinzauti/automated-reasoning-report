@@ -2,7 +2,7 @@
 As explained in~\cite{ClingoGuide} an ASP model is divided in four part: generate, define, test and display.
 As for the generate part our Python program handles both the generation of the random instances in random mode and the inclusion of the user defined input in manual mode.
 \subsection{Generate}
-The input is composed by \mintinline{text}{n} + 1 \emph{ground terms}, with \mintinline{text}{n} the number of starting points:
+The input is composed by \mintinline{text}{n} + 1 \emph{ground terms}, with \mintinline{text}{n} the number of starting points\footnote{From now one we represent column position with $X$ and row position with $Y$. Even in the Python script, when a point is labelled as ($X$, $Y$) we are referring to columns and row. This is rather unusual, but necessary in order to be consistent with the notation of the problem assigned.}:
 \begin{minted}[breaklines, linenos, escapeinside=@@]{text}
     boardl(D).
     number(X@$_1$@, Y@$_1$@, T@$_1$@).
@@ -85,7 +85,7 @@ Finally on the last line we impose, using the \emph{aggregate} \mintinline{text}
 Finally with the last two lines we display our solution, hiding everything except the goal and the link towards it. The output format is:
 
 \begin{minted}[breaklines, linenos, escapeinside=@@]{text}
-    link(X@$_1$@, Y@$_1$@, X@$_2$@, X@$_2$@).
+    link(X@$_1$@, Y@$_1$@, X@$_2$@, Y@$_2$@).
     .
     .
     .

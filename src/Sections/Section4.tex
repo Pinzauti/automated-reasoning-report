@@ -14,26 +14,77 @@ After that, on line 2, we need to define also the number of starting points\foot
 On line 3 we define the input format of the starting points which will be of the form:
 \begin{minted}[breaklines, linenos, escapeinside=@@]{minizinc}
     starting_points = [|X@$_1$@, Y@$_1$@, T@$_1$@
-                         .
-                         .
-                         .
+                       ...
                        |X@$_n$@, Y@$_n$@, T@$_n$@|];
 \end{minted}
-with  \mintinline{minizinc}{n} the number of starting points and each line representing, in order, the X, Y coordinates of a starting point and the number of turns it has to make in order to arrive to the goal.
+with  \mintinline{minizinc}{n} the number of starting points and each line representing, in order, the $X$, $Y$ coordinates of a starting point and the number of turns it has to make in order to arrive to the goal.
 
-Finally, on line 3, we define the multidimensional array of variables \mintinline{minizinc}{Board}. Board is of size $D$x$D$ and has two dimensions: the first one will store the elements of the board from the one represented in~\ref{figm:board}:
-\begin{figure}[h]
+Finally, on line 3, we define the multidimensional array of variables \mintinline{minizinc}{Board}. \mintinline{minizinc}{Board} is of size $D$x$D$ and has two dimensions: the first one will store in each position one of the possible elements of the board among the one represented in figure~\ref{figm:board}:
+\begin{figure}[h!]
     \centering
     \def\svgwidth{\columnwidth}
     \import{./Images/}{minizinc.pdf_tex}
-    \caption{First dimension of Board}
+    \caption{First dimension of Board. Each number corresponds to the element represented.}
     \label{figm:board}
 \end{figure}
-the second dimension of the board will keep track of which path\footnote{We have one path for each starting point, all paths intersect in one single point at the end.} each cell belongs to, this is necessary, as we will se later, in order to constraint the number of turns each path as to make.
+the second dimension of the board will keep track of which path\footnote{We have one path for each starting point, all paths intersect in one single point at the end.} each cell belongs to, this is necessary, as we will se later, in order to constraint the number of turns each path has to make.
+
+
+\subsection{Predicates}\label{subsec:predicates}
+We start defining the predicates \mintinline{minizinc}{top},\mintinline{minizinc}{bottom},\mintinline{minizinc}{left} and \mintinline{minizinc}{right}. These predicates defines the possible elements, again among the ones in figure~\ref{figm:board}, that we can find on the top, on the bottom, on the left and on the right.
+Let us take an example:
+\begin{minted}[breaklines, linenos]{minizinc}
+    predicate top(int: i, int: j) =
+    i-1 > 0 /\ 
+    (Board[i-1, j, 1] = 2 \/ Board[i-1, j, 1] = 4 \/ Board[i-1, j, 1] = 6 \/ Board[i-1, j, 1] = 8 \/ Board[i-1, j, 1] = 9 \/ Board[i-1, j, 1] = 10 \/ Board[i-1, j, 1] = 11 \/ Board[i-1, j, 1] = 12) /\ 
+    (Board[i-1, j, 2] != number + 1 -> (Board[i, j, 2] = Board[i-1, j, 2]  \/ Board[i, j, 2] = number + 1));
+\end{minted}
+We are in position \mintinline{minizinc}{i}, \mintinline{minizinc}{j} and we want to state the possible elements on top of that cell. First of all we check to be still inside the board, i.e. that the position $i-1$ is greater than zero. Then we proceed allowing all the cells that can start on top of another cell (in this example 2,4,6,8,9). This was for the first dimension of the board. As far as the second dimension we check that the top cell is not an intersection cell, the intersection cell is labelled on the second board with the number \mintinline{minizinc}{dimension + 1}. If it is not we required the cell \mintinline{minizinc}{i}, \mintinline{minizinc} to be on the same path of the cell \mintinline{minizinc}{i-1}, \mintinline{minizinc}{j} or the be an intersection point. In this way we keep track of each path, and allow them to end in the same point.
 
 \subsection{Constraints}
+We shall start placing in each starting point a cell of type 12 (again, according to figure~\ref{figm:board} which from now on will be taken as reference when stating any cell number). Note that in order to be as consistent as possible with the ASP model we have to adapt the peculiar notation of the assignment (i.e. inverse row index, column and row notation inverted) to the MiniZinc notation. The code does so:
+
+\begin{minted}[breaklines, linenos]{minizinc}
+    constraint(
+        forall(n in N)
+        (
+        if starting_points[n,2] = 1 then Board[dimension, starting_points[n,1], 1] = 12 /\ Board[dimension, starting_points[n,1], 2] = n
+        elseif
+        starting_points[n,2] = dimension then Board[1, starting_points[n,1], 1] = 12 /\ Board[1, starting_points[n,1], 2] = n
+        else
+        Board[dimension - starting_points[n,2] + 1, starting_points[n,1], 1] = 12 /\ Board[dimension - starting_points[n,2] + 1, starting_points[n,1], 2] = n
+        endif
+        )
+        );
+\end{minted}
+In the first dimension of the board we place the number 12 while in the second dimension we label each starting point with a number, this number will define each path on the board.
+
+We proceed now using the predicates of~\ref{subsec:predicates} in order to define which moves are allowed for each type of cell.
 
 
-\paragraph{Predicates}
+\begin{minted}[breaklines, linenos]{minizinc}
+    constraint(
+        forall(i,j in D)(
+        
+        (Board[i, j, 1] = 1 -> left(i,j) /\ top(i,j)) /\
+        
+        ...
+        
+        (Board[i, j, 1] = 12 -> top(i,j) \/ bottom(i,j) \/ right(i,j) \/ left(i,j))
+        
+        )
+        );
+\end{minted}
 
-\paragraph{Global Constraints}
+We reported only two example, the cell 1 allow to move on the left and on top, while the starting point cell allows to move everywhere. All the other cells allowed moves are properly defined.
+
+Another constraint that we impose (and the code of which we omit, as it is quite trivial) is imposing that if a cell is empty in the first dimension of the board it should be the same even in the second dimension and viceversa.
+
+\subsection{Global constraints}
+The following global constraints were used:
+
+\begin{description}
+    \item[among] \mintinline{minizinc}{among(var int: n, array [$X] of var int: x, set of int: v)} Requires exactly \mintinline{minizinc}{n} variables in \mintinline{minizinc}{x} to take one of the values in \mintinline{minizinc}{v}.
+    \item[count\_eq]  \mintinline{minizinc}{predicate count_eq(array [$X] of var int: x, var int: y, var int: c)} Constrains \mintinline{minizinc}{c} to be the number of occurrences of \mintinline{minizinc}{y} in \mintinline{minizinc}{x}.
+\end{description}
+

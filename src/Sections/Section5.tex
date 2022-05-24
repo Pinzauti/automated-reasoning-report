@@ -1,12 +1,46 @@
 \section{Conclusions}
+Chuffed 0.10.4
 \section{Benchmarks}\label{sec:benchmarks}
+You can find all the benchmark instances in the \path{src\minizinc\data} folder and \path{src\asp\data} folder. We briefly report an overview of the performance below.
 
-\begin{tabular}{ |p{0.5cm}||p{2cm}|p{2cm}||p{2cm}|p{2cm}||p{2cm}|  }
+\begin{tabular}{ |p{0.3cm}||p{1.6cm}|p{1.6cm}||p{1.6cm}|p{1.6cm}|p{1.6cm}| }
     \hline
     \multicolumn{6}{|c|}{Benchmark instances} \\
     \hline
-    \# &Dimension &Starting points &Minizinc Time &ASP Time &Solver setting (MiniZinc)\\
+    \# &Dimension &Starting points &Minizinc Time &ASP Time &Solutions\\
     \hline
-    1 &3 &3 &004 &AF &AF\\
+    1 &3 &2 &\SI{506}{ms} &\SI{5}{ms} &4 \\
+    2 &3 &2 &\SI{516}{ms} &\SI{16}{ms} &3 \\
+    3 &3 &3 &\SI{367}{ms} &\SI{4}{ms} &1 \\
+    4 &3 &3 &\SI{350}{ms} &\SI{8}{ms} &1 \\
+    5 &3 &3 &\SI{369}{ms} &\SI{7}{ms} &1 \\
+    \hline
+    6 &4 &2 &\SI{363}{ms} &\SI{13}{ms} &3 \\
+    7 &4 &2 &\SI{567}{ms} &\SI{105}{ms} &41 \\
+    8 &4 &2 &\SI{566}{ms} &\SI{121}{ms} &6 \\
+    9 &4 &3 &\SI{000}{ms} &\SI{000}{ms} &1 \\
+    10 &4 &3 &\SI{000}{ms} &\SI{000}{ms} &1 \\
+    11 &4 &3 &\SI{000}{ms} &\SI{000}{ms} &1 \\
+    12 &4 &3 &\SI{000}{ms} &\SI{000}{ms} &1 \\
+    13 &4 &4 &\SI{000}{ms} &\SI{000}{ms} &1 \\
+    14 &4 &4 &\SI{000}{ms} &\SI{000}{ms} &1 \\
+    15 &4 &4 &\SI{000}{ms} &\SI{000}{ms} &1 \\
+    \hline
+    16 &5 &2 &\SI{000}{ms} &\SI{000}{ms} &1 \\
+    17 &5 &2 &\SI{000}{ms} &\SI{000}{ms} &1 \\
+    18 &5 &2 &\SI{000}{ms} &\SI{000}{ms} &1 \\
+    19 &5 &3 &\SI{000}{ms} &\SI{000}{ms} &1 \\
+    20 &5 &3 &\SI{000}{ms} &\SI{000}{ms} &1 \\
+    21 &5 &3 &\SI{000}{ms} &\SI{000}{ms} &1 \\
+    22 &5 &3 &\SI{000}{ms} &\SI{000}{ms} &1 \\
+    23 &5 &4 &\SI{000}{ms} &\SI{000}{ms} &1 \\
+    24 &5 &4 &\SI{000}{ms} &\SI{000}{ms} &1 \\
+    25 &5 &4 &\SI{000}{ms} &\SI{000}{ms} &1 \\
+    \hline
+    26 &6 &2 &\SI{000}{ms} &\SI{000}{ms} &1 \\
+    27 &6 &3 &\SI{000}{ms} &\SI{000}{ms} &1 \\
+    28 &6 &3 &\SI{000}{ms} &\SI{000}{ms} &1 \\
+    29 &6 &4 &\SI{000}{ms} &\SI{000}{ms} &1 \\
+    30 &6 &4 &\SI{000}{ms} &\SI{000}{ms} &1 \\
     \hline
    \end{tabular}
