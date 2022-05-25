@@ -41,16 +41,14 @@ This report is written using the \href{https://ctan.org/pkg/minted?lang=en}{Mint
 \subsection{How to run}
 First thing first you need to create a virtual environment and install the required packages\footnote{It will detect automatically if you are using Windows or Linux, no need to adjust anything.}. To do so just run the following commands\graffito{The packages installed are, peraphs unsuprisingly, clingo and minizinc[dzn].}:
 \begin{minted}{bash}
-    cd src/
-    make setup
+cd src/
+make setup
 \end{minted}
-
 If you want to know what you can do just type:
 
 \begin{minted}{bash}
-    make help 
+make help 
 \end{minted}
-
 We will however explain everything here.
 
 \subsubsection{ASP}
@@ -60,7 +58,7 @@ Two modes are available: a random mode and a manual mode. The random mode will g
 
 If you want to use random mode you need to run the following command:
 \begin{minted}{bash}
-    make asp-random  [d DIMENSION] [n NUMBER] [s SOLUTIONS]
+make asp-random  [d DIMENSION] [n NUMBER] [s SOLUTIONS]
 \end{minted}
 
 you can choose the dimension of the board and the number of initial points. However if you don't want to the program will generate them randomly for you; you can also decide to input only the dimension or only the number of starting points. Note that a upper bound was set on the dimension, both if you manually define it or if you don't. Going beyond that could lead to excessive execution time\footnote{Why have you not used the --time-limit option? \href{https://github.com/potassco/clingo/issues/151}{The API does not seem to support it}. However all the benchmarks in section~\ref{sec:benchmarks} respect the 5 minutes time limit as required.}.
@@ -73,7 +71,7 @@ It goes without saying that not all the randomly generated instances will be sol
 
 If you want to use manual mode you need to run the following command:
 \begin{minted}{bash}
-    make asp-manual [s SOLUTIONS]
+make asp-manual [s SOLUTIONS]
 \end{minted}
 this will solve the problem with the input data that you should enter in the file \path{src/asp/data/input.lp}. The \mintinline{bash}{s} argument is the same as explained above. All of this is managed by the \mintinline{python}{asp_manual()} function in the \file{main.py} file.
 Some sanity checks on the user input are performed, but it should still be reasonable in order to produce something meaningful and in an acceptable time.
@@ -87,7 +85,7 @@ Again\graffito{If the program fails try adding MiniZinc installation location to
 
 If you want to use random mode you need to run the following command:
 \begin{minted}{bash}
-    make minizinc-random  [d DIMENSION] [n NUMBER] [s SOLUTIONS]
+make minizinc-random  [d DIMENSION] [n NUMBER] [s SOLUTIONS]
 \end{minted}
 where \mintinline{bash}{d} is the dimension of the board, \mintinline{bash}{n} is the number of starting points and \mintinline{bash}{s} is the number of solutions to be displayed. All the parameters are optional, if not inserted  \mintinline{bash}{d} and  \mintinline{bash}{n} will be randomly chosen by the program, and all solution will be displayed.
 
@@ -95,7 +93,7 @@ where \mintinline{bash}{d} is the dimension of the board, \mintinline{bash}{n} i
 
 If you want to use manual mode you should insert the input data in the file \path{src/minizinc/data/input.dzn} and run the following command:
 \begin{minted}{bash}
-    make minizinc-manual [s SOLUTIONS]
+make minizinc-manual [s SOLUTIONS]
 \end{minted}
 where \mintinline{bash}{s} is the number of solutions to be displayed.
 

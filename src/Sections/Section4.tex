@@ -12,7 +12,7 @@ array[D, D, 1..2] of var 0..12: Board;
 
 
 On line 1 we define the dimension of the board as a parameter named \mintinline{minizinc}{dimension}, and a set of integers \mintinline{minizinc}{D} on top of that.
-Then, on line 2, we define also the number of starting points\footnote{This is something not necessary in ASP, but it is necessary in MiniZinc as we are using a multidimensional array to represent the starting points and MiniZinc does not support dynamically sized arrays.} and again a set of int \mintinline{minizinc}{N} on top of that.
+Then, on line 2, we define also the number of starting points\footnote{This is something not necessary in ASP, but it is necessary in MiniZinc as we are using a multidimensional array to represent the starting points and MiniZinc does not support dynamically sized arrays.} and again a set of integers \mintinline{minizinc}{N} on top of that.
 On line 3 we define the matrix \mintinline{minizinc}{starting_points}, which has the following input format:
 \begin{minted}[breaklines, linenos, escapeinside=@@]{minizinc}
 starting_points = [|X@$_1$@, Y@$_1$@, T@$_1$@
@@ -65,7 +65,7 @@ Note that the cell labelled, in the second dimension of the board, as \mintinlin
 \end{figure}
 
 \subsection{Predicates}\label{subsec:predicates}
-We start defining the predicates \mintinline{minizinc}{t_cells(i,j)}, \mintinline{minizinc}{b_cells(i,j)}, \mintinline{minizinc}{l_cells(i,j)} and \mintinline{minizinc}{r_cells(i,j)}. These predicates defines the possible cells, again among the ones in figure~\ref{figm:board}, that we can find on the top, on the bottom, on the left and on the right.
+We start defining the predicates \mintinline{minizinc}{t_cells(i,j)}, \mintinline{minizinc}{b_cells(i,j)}, \mintinline{minizinc}{l_cells(i,j)} and \mintinline{minizinc}{r_cells(i,j)}. These predicates defines the possible cells, again among the ones in figure~\ref{figm:board}, that we can find on the top, on the bottom, on the left and on the right of another cell.
 Let us take an example of one of this predicate:
 \begin{minted}[breaklines, linenos]{minizinc}
 predicate t_cells(int: i, int: j) =
@@ -73,17 +73,17 @@ predicate t_cells(int: i, int: j) =
 \end{minted}
 
 On top of that we build the predicates \mintinline{minizinc}{top(i,j)}, \mintinline{minizinc}{bottom(i,j)}, \mintinline{minizinc}{left(i,j)} and \mintinline{minizinc}{right(i,j)}.
-Let us take an example of one of those predicates:
+Let us again take an example of one of those predicates:
 \begin{minted}[breaklines, linenos]{minizinc}
 predicate top(int: i, int: j) =
 i-1 > 0 /\ 
 (t_cells(i,j)\/ Board[i-1, j, 1] = 12) /\ 
 (Board[i-1, j, 2] != number + 1 -> (Board[i, j, 2] = Board[i-1, j, 2]  \/ Board[i, j, 2] = number + 1));
 \end{minted}
-We are in position \mintinline{minizinc}{i}, \mintinline{minizinc}{j} and we want to state the possible elements on top of that cell. First of all we check to be still inside the board, i.e. that the position $i-1$ is greater than zero. Then we proceed allowing all the cells that can be connected and this is done in \mintinline[breaklines]{minizinc}{t_cells(i,j)}. This was for the first dimension of the board. As far as the second dimension we check that the connected cell is not an intersection cell, the intersection cell is labelled on the second board with the number \mintinline{minizinc}{dimension + 1}. If it is not we require the cell (\mintinline{minizinc}{i}, \mintinline{minizinc}{j}) to be on the same path of the connected cell, which in this case is the cell (\mintinline{minizinc}{i-1}, \mintinline{minizinc}{j}), or the be an intersection cell. In this way we keep track of each path, and allow them to end in the same point.
+We are in position \mintinline{minizinc}{i}, \mintinline{minizinc}{j} and we want to state the possible elements on top of that cell. First of all we check to be still inside the board, i.e. that the position $i-1$ is greater than zero. Then we proceed allowing all the cells that can be connected on top and this is done in \mintinline[breaklines]{minizinc}{t_cells(i,j)}. This was for the first dimension of the board. As far as the second dimension we check that the connected cell is not an intersection cell, the intersection cell is labelled on the second board with the number \mintinline{minizinc}{dimension + 1}. If it is not we require the cell (\mintinline{minizinc}{i}, \mintinline{minizinc}{j}) to be on the same path of the connected cell, which in this case is the cell (\mintinline{minizinc}{i-1}, \mintinline{minizinc}{j}), or the be an intersection cell. In this way we keep track of each path, and allow them to end in the same point.
 
 \subsection{Constraints}
-We shall start placing in each starting point a cell of type 12 (again, according to figure~\ref{figm:board} which from now on will be taken as reference when stating any cell number). Note that in order to be as consistent as possible with the ASP model we have to adapt the peculiar notation of the assignment (i.e. inverse row index, column and row notation inverted) to the MiniZinc notation. The code does so:
+We shall start placing in each starting point a cell of type 12 (again, according to figure~\ref{figm:board} which from now on will be taken as reference when stating any cell number). Note that in order to be as consistent as possible with the ASP model we have to adapt the peculiar notation of the assignment (i.e. inverse row index, column and row notation inverted) to the MiniZinc notation. The following code does so:
 
 \begin{minted}[breaklines, linenos]{minizinc}
 forall(n in N)(
@@ -112,11 +112,11 @@ forall(i,j in D)(
 
 We reported only two examples, the cell 1 allow to move on the left and on top, while the starting point cell allows to move everywhere. All the other cells allowed moves are properly defined.
 
-Another constraint that we impose (and the code of which we omit, as it is quite trivial) is imposing that if a cell is empty in the first dimension of the board it should be the same even in the second dimension and viceversa.
+Another constraint that we impose (and the code of which we omit, as it is quite trivial) is that if a cell is empty in the first dimension of the board it should be the same even in the second dimension and viceversa.
 
 In addition we impose that on the second dimension of the board there can't be numbers (i.e. paths) greater than \mintinline[breaklines]{minizinc}{number + 1}.
 
-The last constraint avoid multiple paths from a single starting point, we partially report it below:
+The last constraint avoid multiple paths from a single starting point, we partially show it below:
 
 \begin{minted}[breaklines, linenos]{minizinc}
 forall(i,j in D where Board[i,j,1] = 12) (
@@ -159,26 +159,26 @@ else
 false 
 endif
 \end{minted}
-Here we require that, depending on the number of starting points, there should be a certain type of intersection cells, e.g. if we have four points we need a single interception cell, the number 11.
-And so on for the other cases.
+Here we require that, depending on the number of starting points, there should be a certain type of intersection cells, e.g. if we have four starting points we need a single interception cell, the number 11.
+And so on and so forth for the other cases.
 
 We proceed now with three brief constraints\graffito{Some of those constraints could seem redundant, but for how the predicates in section~\ref{subsec:predicates} were defined they turned to be necessary.}:
 \begin{minted}[breaklines, linenos]{minizinc}
-constraint(
 forall (n in N)(
 let {array[D,D] of var 0..12: MoveBoard; constraint forall(i,j in D) (if  Board[i,j,2] = n then MoveBoard[i,j] = Board[i,j, 1] else MoveBoard[i,j] = 0 endif);} in
 among(starting_points[n,3], MoveBoard, 1..4)
-));
+)
+);
+\end{minted}
 
-constraint(
+Here we require each path to do the prescribed number of turns: the number of turns for each starting point is stored in the third column of \mintinline{minizinc}{starting_points} and the moves from 1 to 4 are, according to figure~\ref{figm:board}, the turning cells. 
+\begin{minted}[breaklines, linenos]{minizinc}
 let {array[D,D] of var 0..12: PathsBoard; constraint forall(i,j in D) (PathsBoard[i,j] = Board[i,j,2]);} in
 count_eq(PathsBoard, number + 1, 1)
-);
-
-constraint(
+\end{minted}
+Here we impose that there has to be one and only one intersection point (i.e. point labelled as \mintinline[breaklines]{minizinc}{number + 1}). 
+\begin{minted}[breaklines, linenos]{minizinc}
 let {array[D,D] of var 0..12: MoveBoard; constraint forall(i,j in D) (MoveBoard[i,j] = Board[i,j,1]);} in
 count_eq(MoveBoard, 12, number)
-);
-    \end{minted}
-
-In the first one we require each path to do the prescribed number of turns: the number of turn for each starting point is stored in the third element of \mintinline{minizinc}{starting_points} and the moves from 1 to 4 are, according to figure~\ref{figm:board} the turning cells. In the second one we impose that the number of intersection point (i.e. point labelled as \mintinline[breaklines]{minizinc}{number + 1}) is exactly one. Then with the last one we impose the number of starting cells (i.e. labelled with 12 in the first dimension of the board) to be exactly the same as the number of starting points.
+\end{minted}
+Then with the last constraint we impose the number of starting cells (i.e. cells labelled with 12 in the first dimension of the board) to be exactly the same as the number of starting points.
