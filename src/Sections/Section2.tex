@@ -1,7 +1,6 @@
 \section{Project structure}
 You can find the source code \href{https://github.com/pinzauti/automated-reasoning}{here} and the source for the report \href{https://github.com/pinzauti/automated-reasoning-report}{here}.
-
-The file structure of the project is the following\graffito{In this section we try to give a quick look at the whole project, please note that if further details are needed all the code is properly documented, both the models and the Python program.}:
+The file structure of the project is the following\graffito{In this section we try to give a quick look at the whole project, please note that if further details are needed all the code, both the models and the Python program, is properly documented.}:
 \dirtree{%
 .1 src.
 .2 asp\DTcomment{ASP part of the project.}.
@@ -10,14 +9,15 @@ The file structure of the project is the following\graffito{In this section we t
 .4 benchmark1.lp\DTcomment{Benchmark instance.}.
 .4 \dots.
 .4 benchmark30.lp\DTcomment{Benchmark instance.}.
-.3 model.lp\DTcomment{ASP Model.}.
+.3 model.lp\DTcomment{ASP model.}.
 .2 minizinc\DTcomment{MiniZinc part of the project.}.
 .3 data\DTcomment{Input data.}.
 .4 input.dzn\DTcomment{User defined input for manual mode.}.
 .4 benchmark1.dzn\DTcomment{Benchmark instance.}.
 .4 \dots.
 .4 benchmark30.dzn\DTcomment{Benchmark instance.}.
-.3 model.mzn\DTcomment{MiniZinc Model.}.
+.3 model.mzn\DTcomment{MiniZinc model.}.
+.3 solver.mpc\DTcomment{MiniZinc solver configuration.}.
 .2 main.py.\DTcomment{Program entrypoint.}.
 .2 asp.py.\DTcomment{Handles everything related to ASP.}.
 .2 mz.py.\DTcomment{Handles everything related to MiniZinc.}.
@@ -35,7 +35,7 @@ As far as MiniZinc goes the model was developed using \href{https://github.com/M
 
 In both cases \href{https://copilot.github.com/}{Github Copilot} assisted the development process.
 
-This report is written using \href{https://www.latex-project.org/}{LaTeX}, the \href{https://ctan.org/pkg/minted?lang=en}{Minted package} for the source code and \href{https://inkscape.org/}{Inkscape} for creating the figures.
+This report is written using the \href{https://ctan.org/pkg/minted?lang=en}{Minted package} for the source code and \href{https://inkscape.org/}{Inkscape} for creating the images.
 
 
 \subsection{How to run}
@@ -63,8 +63,8 @@ If you want to use random mode you need to run the following command:
     make asp-random  [d DIMENSION] [n NUMBER] [s SOLUTIONS]
 \end{minted}
 
-you can choose the dimension of the board and the number of initial points. However if you don't want to the program will generate them randomly for you; you can also decide to input only the dimension or only the number of starting points. Note that a upper bound was set on the dimension, both if you manually define it or if you don't. Going beyond that could lead to excessive execution time\footnote{Why did you not used the --time-limit option? \href{https://github.com/potassco/clingo/issues/151}{The API does not seem to support it}. However all the benchmarks in section~\ref{sec:benchmarks} respect the 5 minutes time limit as required.}.
-By default all solutions will be displayed, if you want to display only a specific amount of solution specify it to the argument \mintinline{bash}{s}. 
+you can choose the dimension of the board and the number of initial points. However if you don't want to the program will generate them randomly for you; you can also decide to input only the dimension or only the number of starting points. Note that a upper bound was set on the dimension, both if you manually define it or if you don't. Going beyond that could lead to excessive execution time\footnote{Why have you not used the --time-limit option? \href{https://github.com/potassco/clingo/issues/151}{The API does not seem to support it}. However all the benchmarks in section~\ref{sec:benchmarks} respect the 5 minutes time limit as required.}.
+By default all solutions will be displayed, if you want to display only a specific number of solution specify it to the argument \mintinline{bash}{s}. 
 
 All of this is managed by the \mintinline{python}{asp_random()} function in the \file{main.py} file. 
 It goes without saying that not all the randomly generated instances will be solvable, and the program will communicate when those are not.
@@ -75,32 +75,32 @@ If you want to use manual mode you need to run the following command:
 \begin{minted}{bash}
     make asp-manual [s SOLUTIONS]
 \end{minted}
-this will solve the problem with the input data that you should enter in the file \path{src\asp\data\input.lp}. The \mintinline{bash}{s} argument is the same as explained above. All of this is managed by the \mintinline{python}{asp_manual()} function in the \file{main.py} file.
+this will solve the problem with the input data that you should enter in the file \path{src/asp/data/input.lp}. The \mintinline{bash}{s} argument is the same as explained above. All of this is managed by the \mintinline{python}{asp_manual()} function in the \file{main.py} file.
 Some sanity checks on the user input are performed, but it should still be reasonable in order to produce something meaningful and in an acceptable time.
 
 As anticipated the solutions will be printed in an human readable way thanks to the function \mintinline{python}{asp_prettier()} located in the \file{main.py} file.
 
 \subsubsection{MiniZinc}
-Again, two modes are available: a random mode and a manual mode. The parameters and the functioning are the same, however we briefly present them\graffito{If the program returns you some kind of generic error it is most likely that you should add MiniZinc installation location to your PATH. More on that \href{https://github.com/MiniZinc/minizinc-python/issues/60}{here}.}.
+Again\graffito{If the program fails try adding MiniZinc installation location to your \mintinline{bash}{PATH}. More on that \href{https://github.com/MiniZinc/minizinc-python/issues/60}{here}.}, two modes are available: a random mode and a manual mode. The parameters and the functioning are the same, however we briefly present them.
 
 \paragraph{Random mode}
 
 If you want to use random mode you need to run the following command:
 \begin{minted}{bash}
-    make minzinc-random  [d DIMENSION] [n NUMBER] [s SOLUTIONS]
+    make minizinc-random  [d DIMENSION] [n NUMBER] [s SOLUTIONS]
 \end{minted}
 where \mintinline{bash}{d} is the dimension of the board, \mintinline{bash}{n} is the number of starting points and \mintinline{bash}{s} is the number of solutions to be displayed. All the parameters are optional, if not inserted  \mintinline{bash}{d} and  \mintinline{bash}{n} will be randomly chosen by the program, and all solution will be displayed.
 
 \paragraph{Manual mode}
 
-If you want to use manual mode you should insert the input data in the file \path{src\minizinc\data\input.dzn} and run the following command:
+If you want to use manual mode you should insert the input data in the file \path{src/minizinc/data/input.dzn} and run the following command:
 \begin{minted}{bash}
     make minizinc-manual [s SOLUTIONS]
 \end{minted}
 where \mintinline{bash}{s} is the number of solutions to be displayed.
 
 \subsubsection{Both}
-You can also solve both the ASP and the MiniZinc problems at the same time, inserting the input data in the file \path{src\asp\data\input.lp} and \path{src\minizinc\data\input.dzn}. The command is
+You can also solve both the ASP and the MiniZinc problems at the same time, inserting the input data in the file \path{src/asp/data/input.lp} and \path{src/minizinc/data/input.dzn}. The command is
 \begin{minted}{bash}
     make both [s SOLUTIONS]
 \end{minted}
