@@ -134,7 +134,7 @@ else true endif
 The following global constraints were used:
 
 \begin{description}
-    \item[among] \mintinline[breaklines]{minizinc}{among(var int: n, array [$X] of var int: x, set of int: v)} Requires exactly \mintinline{minizinc}{n} variables in \mintinline{minizinc}{x} to take one of the values in \mintinline{minizinc}{v}.
+    \item[among] \mintinline[breaklines]{minizinc}{predicate among(var int: n, array [$X] of var int: x, set of int: v)} Requires exactly \mintinline{minizinc}{n} variables in \mintinline{minizinc}{x} to take one of the values in \mintinline{minizinc}{v}.
     \item[count\_eq]  \mintinline[breaklines]{minizinc}{predicate count_eq(array [$X] of var int: x, var int: y, var int: c)} Constrains \mintinline{minizinc}{c} to be the number of occurrences of \mintinline{minizinc}{y} in \mintinline{minizinc}{x}.
 \end{description}
 The use of let expression was also required, we report the syntax below:
