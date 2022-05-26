@@ -26,7 +26,7 @@ Finally, on line 4, we define the multidimensional array of variables \mintinlin
 
 The second dimension of the board will keep track of which path\footnote{We have one path for each starting point, all paths intersect in one single point at the end.} each cell belongs to, this is necessary, as we will se later, in order to constraint the number of turns each path has to make.
 
-Below you see the output of \mintinline{minizinc}{Board} for the assignment example\footnote{The second dimension of the Board is actually hidden in the output as not really relevant and only useful for internal checks. However if you want to show it it is sufficient to replace \mintinline[breaklines]{minizinc}{show(Board[i,j,1]) | i,j in D} with \mintinline[breaklines]{minizinc}{show(Board[i,j,1]) | t in 1..2, i,j in D}.}:
+Below you see the output of \mintinline{minizinc}{Board} for the assignment example\footnote{The second dimension of the Board is actually hidden in the output as not really relevant and only useful for internal checks. However if you want to show it it is sufficient to replace \mintinline[breaklines]{minizinc}{show(Board[i,j,1]) | i,j in D} with \mintinline[breaklines]{minizinc}{show(Board[i,j,t]) | t in 1..2, i,j in D}.}:
 
 
 \mintinline{minizinc}{Board[i,j,1]}:
@@ -134,8 +134,8 @@ else true endif
 The following global constraints were used:
 
 \begin{description}
-    \item[among] \mintinline[breaklines]{minizinc}{predicate among(var int: n, array [$X] of var int: x, set of int: v)} Requires exactly \mintinline{minizinc}{n} variables in \mintinline{minizinc}{x} to take one of the values in \mintinline{minizinc}{v}.
-    \item[count\_eq]  \mintinline[breaklines]{minizinc}{predicate count_eq(array [$X] of var int: x, var int: y, var int: c)} Constrains \mintinline{minizinc}{c} to be the number of occurrences of \mintinline{minizinc}{y} in \mintinline{minizinc}{x}.
+    \item[among: ]\mintinline[breaklines]{minizinc}{predicate among(var int: n, array [$X] of var int: x, set of int: v)} Requires exactly \mintinline{minizinc}{n} variables in \mintinline{minizinc}{x} to take one of the values in \mintinline{minizinc}{v}.
+    \item[count\_eq: ]\mintinline[breaklines]{minizinc}{predicate count_eq(array [$X] of var int: x, var int: y, var int: c)} Constrains \mintinline{minizinc}{c} to be the number of occurrences of \mintinline{minizinc}{y} in \mintinline{minizinc}{x}.
 \end{description}
 The use of let expression was also required, we report the syntax below:
 
@@ -168,7 +168,6 @@ forall (n in N)(
 let {array[D,D] of var 0..12: MoveBoard; constraint forall(i,j in D) (if  Board[i,j,2] = n then MoveBoard[i,j] = Board[i,j, 1] else MoveBoard[i,j] = 0 endif);} in
 among(starting_points[n,3], MoveBoard, 1..4)
 )
-);
 \end{minted}
 
 Here we require each path to do the prescribed number of turns: the number of turns for each starting point is stored in the third column of \mintinline{minizinc}{starting_points} and the moves from 1 to 4 are, according to figure~\ref{figm:board}, the turning cells. 

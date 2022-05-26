@@ -1,11 +1,11 @@
 \section{Conclusions}
 The following configuration was used for MiniZinc\graffito{MiniZinc solver configuration can be found in \path{src/minizinc/solver.mpc}.}:
 \begin{description}
-    \item[Solver: ] Chuffed 0.10.4
-    \item[Number of solutions: ] All solutions
-    \item[Optimization level: ] -O0 (no optimization)
-    \item[Time limit: ] \SI{300}{s}
-    \item[Annotations: ] \mintinline[breaklines]{minizinc}{int_search(Board, first_fail, indomain_median) satisfy;}
+    \item[Solver: ]Chuffed 0.10.4
+    \item[Number of solutions: ]All solutions
+    \item[Optimization level: ]-O0 (no optimization)
+    \item[Time limit: ]\SI{300}{s}
+    \item[Annotations: ]\mintinline[breaklines]{minizinc}{int_search(Board, first_fail, indomain_median) satisfy;}
 \end{description}
 
 This set of choices was the result of a series of experiments on both small and large instances. As a result this was the combination of parameters that seems to perform better for this specific problem.
